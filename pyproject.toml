@@ -1,0 +1,50 @@
+[build-system]
+requires = ["hatchling>=1.25"]
+build-backend = "hatchling.build"
+
+[project]
+name = "mcp-issuer-check"
+version = "0.1.0"
+description = "See which OAuth authorization servers your MCP servers send your login to, verify their metadata, and pin them."
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+requires-python = ">=3.11"
+authors = [{ name = "Murat Bekgi" }]
+keywords = ["mcp", "model-context-protocol", "oauth", "security", "ai-security", "rfc9728", "rfc8414"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Environment :: Console",
+  "Intended Audience :: Developers",
+  "Intended Audience :: Information Technology",
+  "Programming Language :: Python :: 3",
+  "Topic :: Security",
+  "Topic :: Software Development :: Quality Assurance",
+]
+dependencies = []
+
+[project.urls]
+Homepage = "https://github.com/garag0l/mcp-issuer-check"
+Issues = "https://github.com/garag0l/mcp-issuer-check/issues"
+Changelog = "https://github.com/garag0l/mcp-issuer-check/blob/main/CHANGELOG.md"
+
+[project.scripts]
+mcp-issuer-check = "mcp_issuer_check.cli:main"
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "ruff>=0.6"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/mcp_issuer_check"]
+
+[tool.ruff]
+line-length = 130
+extend-exclude = ["tests/fixtures"]
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP"]
+ignore = ["E501"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

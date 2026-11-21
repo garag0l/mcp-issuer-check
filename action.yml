@@ -1,0 +1,40 @@
+name: mcp-issuer-check
+description: "Alert when an MCP server changes the OAuth authorization server it sends your login to."
+author: garag0l
+branding:
+  icon: lock
+  color: red
+
+inputs:
+  urls:
+    description: "MCP server URLs to check, one per line."
+    required: true
+  pins:
+    description: "Pin file in your repo (create it with: mcp-issuer-check pin --url ... --pins <file>)."
+    default: ".github/mcp-pins.json"
+  fail-on:
+    description: "Fail at or above this severity: high, medium, low, none."
+    default: "high"
+
+runs:
+  using: composite
+  steps:
+    - name: Install mcp-issuer-check
+      shell: bash
+      run: python3 -m pip install --quiet --disable-pip-version-check "$GITHUB_ACTION_PATH"
+    - name: Check
+      shell: bash
+      env:
+        INPUT_URLS: ${{ inputs.urls }}
+        INPUT_PINS: ${{ inputs.pins }}
+        INPUT_FAIL_ON: ${{ inputs.fail-on }}
+      run: |
+        args=()
+        while IFS= read -r u; do u="$(echo "$u" | xargs)"; [ -n "$u" ] && args+=(--url "$u"); done <<< "$INPUT_URLS"
+        set +e
+        python3 -m mcp_issuer_check "${args[@]}" --pins "$INPUT_PINS" --fail-on "$INPUT_FAIL_ON" --no-color > "$RUNNER_TEMP/mcp-issuer-check.txt"
+        code=$?
+        set -e
+        cat "$RUNNER_TEMP/mcp-issuer-check.txt"
+        { echo '```'; cat "$RUNNER_TEMP/mcp-issuer-check.txt"; echo '```'; } >> "$GITHUB_STEP_SUMMARY"
+        if [ "$code" != "0" ]; then echo "::error::mcp-issuer-check found issues at or above '$INPUT_FAIL_ON'"; exit 1; fi
