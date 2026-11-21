@@ -28,7 +28,7 @@ The SDK fixes bind *stored* credentials to an issuer. Everything else rests on t
 ## Install
 
 ```bash
-pipx install git+https://github.com/garag0l/mcp-issuer-check
+pipx install mcp-issuer-check
 ```
 
 Python 3.11+, no third-party dependencies.
@@ -92,7 +92,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
-      - uses: garag0l/mcp-issuer-check@v0.1.0
+      - uses: garag0l/mcp-issuer-check@v0.1.1
         with:
           urls: |
             https://mcp.notion.com/mcp
