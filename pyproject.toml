@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "mcp-issuer-check"
-version = "0.1.0"
+version = "0.1.1"
 description = "See which OAuth authorization servers your MCP servers send your login to, verify their metadata, and pin them."
 readme = "README.md"
 license = "MIT"
